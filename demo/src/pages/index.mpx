@@ -1,6 +1,31 @@
 <template>
-  <list></list>
+  <view class="container">
+    <view class="demo" bindtap="translate">
+      <view class="square shadow">
+      </view>
+      <view class="square" wx:style="{{demo1}}">
+      </view>
+    </view>
+  </view>
 </template>
+
+<style lang="stylus">
+.container
+  display flex
+  flex-direction column
+  .demo
+    height 100px
+    background lightblue
+    align-items center
+    display flex
+  .shadow
+    position absolute
+    opacity 0.1
+  .square
+    width 25px
+    height 25px
+    background #7F00FF
+</style>
 
 <script lang="ts" src="./index.ts"></script>
 
