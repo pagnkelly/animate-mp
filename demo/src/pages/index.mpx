@@ -6,6 +6,9 @@
       <view class="square" wx:style="{{demo1}}">
       </view>
     </view>
+    <view class="item" bindtap="jump('numberscroll')">
+      数字滚动
+    </view>
   </view>
 </template>
 
@@ -25,14 +28,47 @@
     width 25px
     height 25px
     background #7F00FF
+.item
+  height 50px
+  background gray
+  color #ffffff
+  text-align center
+  line-height 40px
 </style>
 
-<script lang="ts" src="./index.ts"></script>
+<script lang="ts">
+import mpx, { createPage } from '@mpxjs/core'
+import animate from '../../../src/main'
+createPage({
+  data: {
+    demo1: {
+    }
+  },
+  onLoad () {
+    // onLoad
+    const a = animate()
+    console.log(a, 'aaaaa')
+  },
+  methods: {
+    translate (): void {
+      this.$nextTick(() => {
+        this.demo1 = {
+          transform: 'translateX(200px)',
+          transition: 'transform 1s'
+        }
+      })
+    },
+    jump (page: string) {
+      console.log(page, 'page')
+      mpx.navigateTo({ url: page })
+    }
+  }
+})
+</script>
 
 <script type="application/json">
   {
     "usingComponents": {
-      "list": "../components/list"
     }
   }
 </script>

@@ -1,0 +1,118 @@
+<template>
+  <view class="numberscroll-list">
+    <view class="item {{className}}" wx:for="{{numbers}}" style="{{item.style}}">
+      {{item.number}}
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+  import NP from 'number-precision'
+
+  createComponent({
+    properties: {
+      fromValue: {
+        type: Number,
+        value: 20.1
+      },
+      toValue: {
+        type: Number,
+        value: 10.1
+      },
+      time: {
+        type: Number,
+        value: 1
+      },
+      className: {
+        type: String,
+        value: ''
+      }
+    },
+    data: {
+      numbers: [
+      ],
+      timer: null
+    },
+    attached () {
+    },
+    methods: {
+      doAnimate (fv, tv, ti) {
+        if (fv === tv) {
+          this.numbers = [{
+            number: fv,
+            style: ''
+          }]
+        } else {
+          this.createNumbers(fv, tv, ti)
+        }
+      },
+      createNumbers (fv, tv, ti) {
+        const isIncrease = fv < tv
+        const isDecimals = fv.toString().includes('.')
+        const gap = isIncrease ? NP.minus(tv, fv) : NP.minus(fv, tv)
+        const numbers = []
+
+        let count = gap
+        let decimals = 1
+        if (isDecimals) {
+          decimals = Math.pow(10, fv.toString().split('.')[1].length)
+          count = gap * decimals
+        }
+
+        const itemTime = ti * 1000 / (count + 1)
+        for (let i = 0; i < count; i++) {
+          const fn = isIncrease ? NP.plus : NP.minus
+          numbers.push({
+            number: fn(fv, NP.divide(i, decimals)),
+            style: `animation: numberfade 0ms linear ${itemTime * (i + 1)}ms forwards;z-index: ${count - i}`
+          })
+        }
+        numbers.push({
+          number: tv,
+          style: `z-index: 0`
+        })
+        this.numbers = numbers
+      }
+    },
+    watch: {
+      'fromValue,toValue,time': {
+        handler (val, oldval) {
+          console.log(val, oldval)
+          const [fromValue, toValue, time] = val
+          const [ofromValue, otoValue, otime] = oldval = []
+          if (fromValue !== ofromValue || toValue !== otoValue || time !== otime) {
+            this.doAnimate(fromValue, toValue, time)
+          }
+        },
+        immediate: true
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.item 
+  position absolute
+  opacity 1
+  width 100px
+  height 30px
+  background #fff
+
+  @keyframes numberfade
+  {
+    0%{
+      opacity: 1;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>

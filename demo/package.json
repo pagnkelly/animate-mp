@@ -17,9 +17,10 @@
   "license": "ISC",
   "dependencies": {
     "@mpxjs/api-proxy": "^2.5.10",
+    "@mpxjs/core": "^2.6.31",
+    "number-precision": "^1.5.1",
     "vue": "^2.6.10",
-    "vue-i18n": "^8.15.3",
-    "@mpxjs/core": "^2.6.31"
+    "vue-i18n": "^8.15.3"
   },
   "browserslist": [
     "ios >= 9",

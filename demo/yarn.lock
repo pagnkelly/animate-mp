@@ -6347,6 +6347,11 @@ num2fraction@^1.2.2:
   resolved "http://artifactory.intra.xiaojukeji.com:80/artifactory/api/npm/npm/num2fraction/download/num2fraction-1.2.2.tgz#6f682b6a027a4e9ddfa4564cd2589d1d4e669ede"
   integrity sha1-b2gragJ6Tp3fpFZM0lidHU5mnt4=
 
+number-precision@^1.5.1:
+  version "1.5.1"
+  resolved "http://artifactory.intra.xiaojukeji.com/artifactory/api/npm/npm/number-precision/download/number-precision-1.5.1.tgz?dl=https%3A%2F%2Fregistry.npmmirror.com%2Fnumber-precision%2Fdownload%2Fnumber-precision-1.5.1.tgz#ea343990409d873464074353fcb30ac105a90e61"
+  integrity sha1-6jQ5kECdhzRkB0NT/LMKwQWpDmE=
+
 nwsapi@^2.0.7:
   version "2.2.0"
   resolved "http://artifactory.intra.xiaojukeji.com:80/artifactory/api/npm/npm/nwsapi/download/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
