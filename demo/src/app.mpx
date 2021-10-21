@@ -8,7 +8,8 @@
   {
     "pages": [
       "./pages/index",
-      "./pages/numberscroll"
+      "./pages/numberscroll",
+      "./pages/textscroll"
     ]
   }
 </script>

@@ -9,6 +9,9 @@
     <view class="item" bindtap="jump('numberscroll')">
       数字滚动
     </view>
+    <view class="item" bindtap="jump('textscroll')">
+      文案滚动
+    </view>
   </view>
 </template>
 

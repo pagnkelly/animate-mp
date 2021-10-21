@@ -1,0 +1,72 @@
+<template>
+  <view class="textscroll-wrapper">
+    <view style="{{textStyle}}" bindanimationend="animend">{{texta}}</view>
+    <view style="{{textStyle}}">{{textb}}</view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    data: {
+      texta: 'aaaaaaa',
+      textb: 'aaaaaaa',
+      textStyle: ''
+    },
+    attached () {
+      setTimeout(() => {
+        this.textb = 'bbbbbbb'
+      }, 2000)
+      setTimeout(() => {
+        this.textb = 'ccccccc'
+      }, 4000)
+      setTimeout(() => {
+        this.textb = 'ddddddd'
+      }, 6000)
+    },
+    methods: {
+      animend (v) {
+        this.texta = this.textb
+        this.textStyle = 'transform: translateY(0)'
+      }
+    },
+    watch: {
+      textb: {
+        handler (val, oldval) {
+          console.log(val, oldval, 'ccccc')
+          if (oldval && val !== oldval) {
+            this.textStyle = `animation-name: textmove;
+                              animation-duration: 1s;
+                              animation-timing-function: linear;
+                              animation-delay: 0;
+                              animation-fill-mode: forwards;`
+          }
+        },
+        immediate: true
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.textscroll-wrapper
+  overflow hidden
+  height 22px
+
+  @keyframes textmove
+  {
+    0%{
+      transform translateY(0)
+    }
+    100%{
+      transform translateY(-22px)
+    }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>
