@@ -9,7 +9,8 @@
     "pages": [
       "./pages/index",
       "./pages/numberscroll",
-      "./pages/textscroll"
+      "./pages/textscroll",
+      "./pages/shakejump"
     ]
   }
 </script>

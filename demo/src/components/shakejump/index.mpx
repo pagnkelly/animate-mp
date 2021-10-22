@@ -1,0 +1,168 @@
+<template>
+  <view class="shakejump-wrapper">
+    <view class="text">
+      已减
+      <view class="jumper" style="{{shakeStyle}}">3</view>
+      元
+      <view class="jumper-wrapper" style="{{jumpStyleX}}">
+        <view class="jumper" style="{{jumpStyleY}}">3</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    data: {
+    },
+    computed: {
+      shakeStyle () {
+        const name = ['tobig', 'rotate0tor', 'rotatertol', 'rotateltor', 'rotatertol', 'rotatelto0', 'tonormal']
+        const duration = ['133ms', '67ms', '67ms', '67ms', '67ms', '67ms', '133ms']
+        const timingFunction = ['cubic-bezier(0.33, 0.00, 0.25, 1.00)', 'linear', 'linear', 'linear', 'linear', 'linear', 'cubic-bezier(0.33, 0.00, 0.83, 1.00)']
+        const delay = ['2000ms', '2133ms', '2200ms', '2267ms', '2333ms', '2400ms', '2467ms']
+        const fillMode = ['forwards', 'forwards', 'forwards', 'forwards', 'forwards', 'forwards']
+        return `
+                animation-name: ${name.join(',')};
+                animation-duration: ${duration.join(',')};
+                animation-timing-function: ${timingFunction.join(',')};
+                animation-delay: ${delay.join(',')};
+                animation-fill-mode: ${fillMode.join(',')}; 
+              `
+      },
+      jumpStyleX () {
+        return `
+                animation-name: jumpupX, jumpdownX;
+                animation-duration: 375ms, 492ms;
+                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00);
+                animation-delay: 0, 375ms;
+                animation-fill-mode: 'forwards', 'forwards';
+              `
+      },
+      jumpStyleY () {
+        return `
+                animation-name: jumpupX, jumpdownY;
+                animation-duration: 375ms, 492ms;
+                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00);
+                animation-delay: 0, 375ms;
+                animation-fill-mode: 'forwards', 'forwards';
+              `
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.text
+  margin 100px 0 0 20px
+  display flex
+  align-items baseline
+  .jumper
+    color #FE01A2
+    font-size 40px
+    margin 0 5px
+
+  .d
+    width 100px
+    height 100px
+    background grey
+    animation drop 1s linear
+  @keyframes tobig
+  {
+    0%{
+      transform scale(1)
+    }
+    100%{
+      transform scale(1.5)
+    }
+  }
+  @keyframes tonormal
+  {
+    0%{
+      transform scale(1.5)
+    }
+    100%{
+      transform scale(1)
+    }
+  }
+  @keyframes rotate0tor
+  {
+    0%{
+      transform scale(1.5) rotateZ(0)
+    }
+    100%{
+      transform scale(1.5) rotateZ(12deg)
+    }
+  }
+  @keyframes rotateltor
+  {
+    0%{
+      transform scale(1.5) rotateZ(-12deg)
+    }
+    100%{
+      transform scale(1.5) rotateZ(12deg)
+    }
+  }
+  @keyframes rotatertol
+  {
+    0%{
+      transform scale(1.5) rotateZ(12deg)
+    }
+    100%{
+      transform scale(1.5) rotateZ(-12deg)
+    }
+  }
+  @keyframes rotatelto0
+  {
+    0%{
+      transform scale(1.5) rotateZ(-12deg)
+    }
+    100%{
+      transform scale(1.5) rotateZ(0)
+    }
+  }
+  @keyframes jumpupX
+  {
+    0%{
+      transform translateX(0)
+    }
+    100%{
+      transform translateX(200px)
+    }
+  }
+  @keyframes jumpupY
+  {
+    0%{
+      transform translateY(0)
+    }
+    100%{
+      transform translateY(100px)
+    }
+  }
+  @keyframes jumpdownX
+  {
+    0%{
+      transform translateX(200px)
+    }
+    100%{
+      transform translateX(500px)
+    }
+  }
+  @keyframes jumpdownY
+  {
+    0%{
+      transform translateY(100px)
+    }
+    100%{
+      transform translateY(400px)
+    }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>
