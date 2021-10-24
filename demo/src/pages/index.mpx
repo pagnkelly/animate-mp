@@ -15,6 +15,9 @@
     <view class="item" bindtap="jump('shakejump')">
       晃动跳跃
     </view>
+    <view class="item" bindtap="jump('movefade')">
+      移动消失
+    </view>
   </view>
 </template>
 

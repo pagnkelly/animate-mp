@@ -10,7 +10,8 @@
       "./pages/index",
       "./pages/numberscroll",
       "./pages/textscroll",
-      "./pages/shakejump"
+      "./pages/shakejump",
+      "./pages/movefade"
     ]
   }
 </script>

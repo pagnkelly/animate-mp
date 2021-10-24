@@ -34,20 +34,20 @@
       },
       jumpStyleX () {
         return `
-                animation-name: jumpupX, jumpdownX;
-                animation-duration: 375ms, 492ms;
-                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00);
-                animation-delay: 0, 375ms;
-                animation-fill-mode: 'forwards', 'forwards';
+                animation-name: jumpupX, jumpdownX, fadeout;
+                animation-duration: 375ms, 492ms, 200ms;
+                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00), cubic-bezier(0.33, 0.00, 0.67, 1.00);
+                animation-delay: 2s, 2375ms, 2675ms;
+                animation-fill-mode: forwards, forwards, forwards;
               `
       },
       jumpStyleY () {
         return `
-                animation-name: jumpupX, jumpdownY;
+                animation-name: jumpupY, jumpdownY;
                 animation-duration: 375ms, 492ms;
-                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00);
-                animation-delay: 0, 375ms;
-                animation-fill-mode: 'forwards', 'forwards';
+                animation-timing-function: linear, linear;
+                animation-delay: 2s, 2375ms;
+                animation-fill-mode: forwards, forwards;
               `
       }
     }
@@ -129,7 +129,7 @@
       transform translateX(0)
     }
     100%{
-      transform translateX(200px)
+      transform translateX(97px)
     }
   }
   @keyframes jumpupY
@@ -138,25 +138,35 @@
       transform translateY(0)
     }
     100%{
-      transform translateY(100px)
+      transform translateY(-44px)
     }
   }
   @keyframes jumpdownX
   {
     0%{
-      transform translateX(200px)
+      transform translateX(97px)
     }
     100%{
-      transform translateX(500px)
+      transform translateX(245px)
     }
   }
   @keyframes jumpdownY
   {
     0%{
-      transform translateY(100px)
+      transform translateY(-44px)
     }
     100%{
-      transform translateY(400px)
+      transform translateY(94px)
+    }
+  }
+
+  @keyframes fadeout
+  {
+    0%{
+      opacity 1
+    }
+    100%{
+      opacity 0
     }
   }
 </style>
