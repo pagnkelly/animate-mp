@@ -36,7 +36,7 @@
         return `
                 animation-name: jumpupX, jumpdownX, fadeout;
                 animation-duration: 375ms, 492ms, 200ms;
-                animation-timing-function: cubic-bezier(0.33, 0.00, 0.83, 0.83), cubic-bezier(0.17, 0.17, 0.50, 1.00), cubic-bezier(0.33, 0.00, 0.67, 1.00);
+                animation-timing-function: linear, linear, cubic-bezier(0.33, 0.00, 0.67, 1.00);
                 animation-delay: 2s, 2375ms, 2675ms;
                 animation-fill-mode: forwards, forwards, forwards;
               `
@@ -45,7 +45,7 @@
         return `
                 animation-name: jumpupY, jumpdownY;
                 animation-duration: 375ms, 492ms;
-                animation-timing-function: linear, linear;
+                animation-timing-function: cubic-bezier(.32,.89,.69,1.24), cubic-bezier(.42,.01,.98,.61);
                 animation-delay: 2s, 2375ms;
                 animation-fill-mode: forwards, forwards;
               `
@@ -64,11 +64,6 @@
     font-size 40px
     margin 0 5px
 
-  .d
-    width 100px
-    height 100px
-    background grey
-    animation drop 1s linear
   @keyframes tobig
   {
     0%{

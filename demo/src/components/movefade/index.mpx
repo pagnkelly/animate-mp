@@ -22,7 +22,7 @@
         return `
               animation-name: move1Y, move2Y;
               animation-duration: 133ms, 200ms;
-              animation-timing-function: linear, linear;
+              animation-timing-function: cubic-bezier(0.75, 0.00, 0.67, 1.00), cubic-bezier(0.75, 0.00, 0.25, 1.00);
               animation-delay: 2800ms, 2930ms;
               animation-fill-mode: forwards, forwards;
               `
