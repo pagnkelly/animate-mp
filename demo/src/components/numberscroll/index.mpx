@@ -1,6 +1,6 @@
 <template>
-  <view class="numberscroll-list">
-    <view class="item {{className}}" wx:for="{{numbers}}" style="{{item.style}}">
+  <view class="numberscroll-list" style="{{listStyle}}">
+    <view wx:ref="number" class="item" wx:for="{{numbers}}" style="{{item.style}};{{textStyle}}">
       {{item.number}}
     </view>
   </view>
@@ -24,7 +24,7 @@
         type: Number,
         value: 1
       },
-      className: {
+      textStyle: {
         type: String,
         value: ''
       }
@@ -32,7 +32,7 @@
     data: {
       numbers: [
       ],
-      timer: null
+      listStyle: ''
     },
     attached () {
     },
@@ -78,11 +78,22 @@
     watch: {
       'fromValue,toValue,time': {
         handler (val, oldval) {
-          console.log(val, oldval)
           const [fromValue, toValue, time] = val
           const [ofromValue, otoValue, otime] = oldval = []
           if (fromValue !== ofromValue || toValue !== otoValue || time !== otime) {
             this.doAnimate(fromValue, toValue, time)
+          }
+        },
+        immediate: true
+      },
+      textStyle: {
+        handler (val, oldval) {
+          if (val !== oldval) {
+            this.$nextTick(() => {
+              this.$refs.number && this.$refs.number.boundingClientRect((res) => {
+                res && (this.listStyle = `height: ${res.height || res[0].height}px;`)
+              }).exec()
+            })
           }
         },
         immediate: true
@@ -95,8 +106,7 @@
 .item 
   position absolute
   opacity 1
-  width 100px
-  height 30px
+  padding 5px
   background #fff
 
   @keyframes numberfade

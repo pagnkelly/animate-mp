@@ -2,11 +2,12 @@
   <view class="shakejump-wrapper">
     <view class="text">
       已减
-      <view class="jumper" style="{{shakeStyle}}">3</view>
-      元
-      <view class="jumper-wrapper" style="{{jumpStyleX}}">
-        <view class="jumper" style="{{jumpStyleY}}">3</view>
+      <view class="jumper" style="{{shakeStyle}}">3
+        <view class="jumper-wrapper" style="{{jumpStyleX}}">
+          <view class="jumper" style="{{jumpStyleY}}">3</view>
+        </view>
       </view>
+      元
     </view>
   </view>
 </template>
@@ -63,6 +64,11 @@
     color #FE01A2
     font-size 40px
     margin 0 5px
+    position relative
+    .jumper-wrapper
+      position absolute
+      top 0
+      left -5px
 
   @keyframes tobig
   {
