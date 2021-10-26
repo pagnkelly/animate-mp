@@ -53,14 +53,14 @@
 .textscroll-wrapper
   overflow hidden
   height 22px
-
+  margin-top 10px
   @keyframes textmove
   {
     0%{
       transform translateY(0)
     }
     100%{
-      transform translateY(-22px)
+      transform translateY(-100%)
     }
   }
 </style>
