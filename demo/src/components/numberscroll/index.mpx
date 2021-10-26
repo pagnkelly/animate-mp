@@ -61,17 +61,24 @@
         }
 
         const itemTime = ti * 1000 / (count + 1)
-        for (let i = 0; i < count; i++) {
+        for (let i = 0; i < count + 1; i++) {
           const fn = isIncrease ? NP.plus : NP.minus
+          const style = i === count
+            ? `animation-name: numberfadein;
+                                        animation-duration: 0;
+                                        animation-timing-function: linear;
+                                        animation-delay: ${itemTime * (i + 1)}ms;
+                                        animation-fill-mode: forwards;`
+            : `animation-name: numberfadein, numberfadeout;
+              animation-duration: 0, 0;
+              animation-timing-function: linear, linear;
+              animation-delay: ${itemTime * (i + 1)}ms, ${itemTime * (i + 2)}ms;
+              animation-fill-mode: forwards, forwards;`
           numbers.push({
             number: fn(fv, NP.divide(i, decimals)),
-            style: `animation: numberfade 0ms linear ${itemTime * (i + 1)}ms forwards;z-index: ${count - i}`
+            style
           })
         }
-        numbers.push({
-          number: tv,
-          style: `z-index: 0`
-        })
         this.numbers = numbers
       }
     },
@@ -105,17 +112,25 @@
 <style lang="stylus">
 .item 
   position absolute
-  opacity 1
+  opacity 0
   padding 5px
-  background #fff
 
-  @keyframes numberfade
+  @keyframes numberfadeout
   {
     0%{
       opacity: 1;
     }
     100%{
       opacity: 0;
+    }
+  }
+  @keyframes numberfadein
+  {
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
     }
   }
 
