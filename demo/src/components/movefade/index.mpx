@@ -1,5 +1,5 @@
 <template>
-  <view class="movefade-wrapper" style="{{wrapperStyle}}">
+  <view class="movefade-wrapper" style="{{wrapperStyle}}" bindanimationend="end">
     <view class="content" style="{{animateStyle}}">-3</view>
   </view>
 </template>
@@ -26,6 +26,11 @@
               animation-delay: 2800ms, 2930ms;
               animation-fill-mode: forwards, forwards;
               `
+      }
+    },
+    methods: {
+      end () {
+        console.log(1111111)
       }
     }
   })

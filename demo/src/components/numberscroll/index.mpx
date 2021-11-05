@@ -1,5 +1,8 @@
 <template>
   <view class="numberscroll-list" style="{{listStyle}}">
+    <view wx:if="{{delay}}" class="item" style="{{delayStyle}}{{textStyle}}">
+      {{fromValue}}
+    </view>
     <view wx:ref="number" class="item" wx:for="{{numbers}}" style="{{item.style}};{{textStyle}}">
       {{item.number}}
     </view>
@@ -14,19 +17,23 @@
     properties: {
       fromValue: {
         type: Number,
-        value: 20.1
+        value: 10.31
       },
       toValue: {
         type: Number,
-        value: 10.1
+        value: 10.11
       },
       time: {
         type: Number,
-        value: 1
+        value: 1000
       },
       textStyle: {
         type: String,
         value: ''
+      },
+      delay: {
+        type: Number,
+        value: 0
       }
     },
     data: {
@@ -35,6 +42,16 @@
       listStyle: ''
     },
     attached () {
+    },
+    computed: {
+      delayStyle () {
+        console.log(this.delay, 'this.delay')
+        return `animation-name: numberfadein, numberfadeout;
+                animation-duration: 0, 0;
+                animation-timing-function: linear, linear;
+                animation-delay: 0ms, ${this.delay}ms;
+                animation-fill-mode: forwards, forwards;`
+      }
     },
     methods: {
       doAnimate (fv, tv, ti) {
@@ -52,7 +69,6 @@
         const isDecimals = fv.toString().includes('.')
         const gap = isIncrease ? NP.minus(tv, fv) : NP.minus(fv, tv)
         const numbers = []
-
         let count = gap
         let decimals = 1
         if (isDecimals) {
@@ -60,26 +76,37 @@
           count = gap * decimals
         }
 
-        const itemTime = ti * 1000 / (count + 1)
+        const itemTime = ti / (count + 1)
         for (let i = 0; i < count + 1; i++) {
           const fn = isIncrease ? NP.plus : NP.minus
           const style = i === count
             ? `animation-name: numberfadein;
                                         animation-duration: 0;
                                         animation-timing-function: linear;
-                                        animation-delay: ${itemTime * (i + 1)}ms;
+                                        animation-delay: ${itemTime * (i + 1) + this.delay}ms;
                                         animation-fill-mode: forwards;`
             : `animation-name: numberfadein, numberfadeout;
               animation-duration: 0, 0;
               animation-timing-function: linear, linear;
-              animation-delay: ${itemTime * (i + 1)}ms, ${itemTime * (i + 2)}ms;
+              animation-delay: ${itemTime * (i + 1) + this.delay}ms, ${itemTime * (i + 2) + this.delay}ms;
               animation-fill-mode: forwards, forwards;`
           numbers.push({
             number: fn(fv, NP.divide(i, decimals)),
             style
           })
         }
-        this.numbers = numbers
+        console.log(numbers, 'nnnn')
+        this.numbers = []
+        setTimeout(() => {
+          this.numbers = numbers
+        })
+      },
+      calcRect () {
+        this.$nextTick(() => {
+          this.$refs.number && this.$refs.number.boundingClientRect((res) => {
+            res && (this.listStyle = `width:${res.width || res[res.length - 1].width}px;height: ${res.height || res[res.length - 1].height}px;`)
+          }).exec()
+        })
       }
     },
     watch: {
@@ -88,19 +115,18 @@
           const [fromValue, toValue, time] = val
           const [ofromValue, otoValue, otime] = oldval = []
           if (fromValue !== ofromValue || toValue !== otoValue || time !== otime) {
+            console.log(fromValue, toValue, 'fromValue, toValue')
             this.doAnimate(fromValue, toValue, time)
           }
         },
         immediate: true
       },
-      textStyle: {
+      'fromValue,toValue,textStyle': {
         handler (val, oldval) {
-          if (val !== oldval) {
-            this.$nextTick(() => {
-              this.$refs.number && this.$refs.number.boundingClientRect((res) => {
-                res && (this.listStyle = `height: ${res.height || res[0].height}px;`)
-              }).exec()
-            })
+          const [fromValue, toValue, textStyle] = val
+          const [ofromValue, otoValue, otextStyle] = oldval = []
+          if (fromValue !== ofromValue || toValue !== otoValue || textStyle !== otextStyle) {
+            this.calcRect()
           }
         },
         immediate: true
@@ -113,7 +139,7 @@
 .item 
   position absolute
   opacity 0
-  padding 5px
+  padding 0px 5px
 
   @keyframes numberfadeout
   {

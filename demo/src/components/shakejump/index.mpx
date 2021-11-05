@@ -3,7 +3,7 @@
     <view class="text">
       已减
       <view class="jumper" style="{{shakeStyle}}">3
-        <view class="jumper-wrapper" style="{{jumpStyleX}}">
+        <view class="jumper-wrapper" style="{{jumpStyleX}}" bindanimationend="end">
           <view class="jumper" style="{{jumpStyleY}}">3</view>
         </view>
       </view>
@@ -23,7 +23,7 @@
         const name = ['tobig', 'rotate0tor', 'rotatertol', 'rotateltor', 'rotatertol', 'rotatelto0', 'tonormal']
         const duration = ['133ms', '67ms', '67ms', '67ms', '67ms', '67ms', '133ms']
         const timingFunction = ['cubic-bezier(0.33, 0.00, 0.25, 1.00)', 'linear', 'linear', 'linear', 'linear', 'linear', 'cubic-bezier(0.33, 0.00, 0.83, 1.00)']
-        const delay = ['2000ms', '2133ms', '2200ms', '2267ms', '2333ms', '2400ms', '2467ms']
+        const delay = ['1000ms', '1133ms', '1200ms', '1267ms', '1333ms', '1400ms', '1467ms']
         const fillMode = ['forwards', 'forwards', 'forwards', 'forwards', 'forwards', 'forwards']
         return `
                 animation-name: ${name.join(',')};
@@ -38,7 +38,7 @@
                 animation-name: jumpupX, jumpdownX, fadeout;
                 animation-duration: 375ms, 492ms, 200ms;
                 animation-timing-function: linear, linear, cubic-bezier(0.33, 0.00, 0.67, 1.00);
-                animation-delay: 2s, 2375ms, 2675ms;
+                animation-delay: 1600ms, 1975ms, 2275ms;
                 animation-fill-mode: forwards, forwards, forwards;
               `
       },
@@ -47,9 +47,14 @@
                 animation-name: jumpupY, jumpdownY;
                 animation-duration: 375ms, 492ms;
                 animation-timing-function: cubic-bezier(.32,.89,.69,1.24), cubic-bezier(.42,.01,.98,.61);
-                animation-delay: 2s, 2375ms;
+                animation-delay: 1600ms, 1975ms;
                 animation-fill-mode: forwards, forwards;
               `
+      }
+    },
+    methods: {
+      end (e) {
+        console.log(e, 222222)
       }
     }
   })

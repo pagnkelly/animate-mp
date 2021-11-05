@@ -1,17 +1,33 @@
 <template>
-  <numberscroll />
+  <view style="display:flex;algin-items:center">
+    <view>啊啊啊啊啊</view>
+    <view style="position: relative;">
+      <numberscroll fromValue="{{numberAnimationData[0]}}" toValue="{{numberAnimationData[1]}}" time="{{2000}}"/>
+    </view>
+    <view>啊啊啊啊啊</view>
+  </view>
+  
 </template>
 
 <script>
   import { createPage } from '@mpxjs/core'
 
   createPage({
-  
+    data: {
+      numberAnimationData: [10.88, 0.88]
+    },
+    attached () {
+      setTimeout(() => {
+        this.numberAnimationData = [11.11, 12.11]
+      }, 3000)
+    }
   })
 </script>
 
 <style lang="stylus">
-
+.a
+  position absolute
+  padding 5px
 </style>
 
 <script type="application/json">
