@@ -1,10 +1,11 @@
 <template>
   <view style="display:flex;algin-items:center">
-    <view>啊啊啊啊啊</view>
+    <!-- <view class="element" style="{{sty}}">
+      112332
+    </view> -->
     <view style="position: relative;">
-      <numberscroll fromValue="{{numberAnimationData[0]}}" toValue="{{numberAnimationData[1]}}" time="{{2000}}"/>
+      <numberscroll fromValue="{{numberAnimationData[0]}}" toValue="{{numberAnimationData[1]}}" time="{{20000}}"/>
     </view>
-    <view>啊啊啊啊啊</view>
   </view>
   
 </template>
@@ -14,20 +15,31 @@
 
   createPage({
     data: {
-      numberAnimationData: [10.88, 0.88]
+      numberAnimationData: [11.2, 9.2],
+      sty: ''
     },
     attached () {
-      setTimeout(() => {
-        this.numberAnimationData = [11.11, 12.11]
-      }, 3000)
+      this.sty = `@keyframes changeLetter {0% {content: 'A';}}`
     }
   })
 </script>
 
 <style lang="stylus">
-.a
-  position absolute
-  padding 5px
+
+
+.element {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  &:after {
+    animation: changeLetter 3s linear infinite alternate;
+    display: block;
+    content: "A";
+    font-size: 80px;
+  }
+}
+
 </style>
 
 <script type="application/json">

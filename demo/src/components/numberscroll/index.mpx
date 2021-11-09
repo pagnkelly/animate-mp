@@ -3,8 +3,13 @@
     <view wx:if="{{delay}}" class="item" style="{{delayStyle}}{{textStyle}}">
       {{fromValue}}
     </view>
-    <view wx:ref="number" class="item" wx:for="{{numbers}}" style="{{item.style}};{{textStyle}}">
-      {{item.number}}
+    <view wx:for="{{result}}" wx:for-item="jtem" class="jtem">
+      <view wx:ref="number" wx:for="{{jtem}}" class="item" style="{{item.style}};{{textStyle}}">
+        {{item.number}}
+      </view>
+      <view style="opacity:0;{{textStyle}}">
+        {{1}}
+      </view>
     </view>
   </view>
 </template>
@@ -37,7 +42,7 @@
       }
     },
     data: {
-      numbers: [
+      result: [
       ],
       listStyle: ''
     },
@@ -65,46 +70,166 @@
         }
       },
       createNumbers (fv, tv, ti) {
-        const isIncrease = fv < tv
-        const isDecimals = fv.toString().includes('.')
-        const gap = isIncrease ? NP.minus(tv, fv) : NP.minus(fv, tv)
-        const numbers = []
-        let count = gap
-        let decimals = 1
-        if (isDecimals) {
-          decimals = Math.pow(10, fv.toString().split('.')[1].length)
-          count = gap * decimals
+        const fa = fv.toString().split('.')
+        const ta = tv.toString().split('.')
+
+        const faa = fa.map(item => item.split(''))
+        const taa = ta.map(item => item.split(''))
+
+        let gap = faa[0].length - taa[0].length
+        if (gap > 0) {
+          while (gap) {
+            taa[0].unshift(0)
+            gap--
+          }
+        } else {
+          while (gap) {
+            faa[0].unshift(0)
+            gap++
+          }
+        }
+        if (faa[1]) {
+          let gap2 = faa[1].length - taa[1].length
+          if (gap2 > 0) {
+            while (gap2) {
+              taa[1].push(0)
+              gap2--
+            }
+          } else {
+            while (gap2) {
+              faa[1].push(0)
+              gap2++
+            }
+          }
+        } else {
+          faa[1] = []
+          taa[1] = []
         }
 
-        const itemTime = ti / (count + 1)
-        for (let i = 0; i < count + 1; i++) {
-          const fn = isIncrease ? NP.plus : NP.minus
-          const style = i === count
-            ? `animation-name: numberfadein;
-                                        animation-duration: 0;
-                                        animation-timing-function: linear;
-                                        animation-delay: ${itemTime * (i + 1) + this.delay}ms;
-                                        animation-fill-mode: forwards;`
-            : `animation-name: numberfadein, numberfadeout;
-              animation-duration: 0, 0;
-              animation-timing-function: linear, linear;
-              animation-delay: ${itemTime * (i + 1) + this.delay}ms, ${itemTime * (i + 2) + this.delay}ms;
-              animation-fill-mode: forwards, forwards;`
-          numbers.push({
-            number: fn(fv, NP.divide(i, decimals)),
-            style
-          })
+        // faa[0].push('.')
+        // taa[0].push('.')
+        const faaa = faa[0].concat(faa[1])
+        const taaa = taa[0].concat(taa[1])
+
+        const faaaa = +faaa.join('')
+        const taaaa = +taaa.join('')
+
+        const c = Math.abs(faaaa - taaaa)
+        let tg = this.time / c
+        const isIncrease = fv < tv
+        let offset = 0
+        const offsets = []
+        const tgs = []
+        for (let i = 0; i < faaa.length; i++) {
+          if (isIncrease) {
+            offset += tg * Math.pow(10, i) * (10 - +faaa[faaa.length - 1 - i])
+          } else {
+            offset += tg * Math.pow(10, i) * (+faaa[faaa.length - 1 - i])
+          }
+          offsets.push(offset)
+          tgs.push(tg * Math.pow(10, i))
         }
-        console.log(numbers, 'nnnn')
-        this.numbers = []
-        setTimeout(() => {
-          this.numbers = numbers
+
+        offsets.pop()
+        offsets.unshift(0)
+        console.log(offsets, tgs, 1111)
+        let result = []
+
+        const len = faaa.length
+        let start = 0
+        let f = ''
+        let t = ''
+        while (start < len) {
+          f = f + faaa[start]
+          t = t + taaa[start]
+          const fitem = +f
+          const titem = +t
+          const isIncrease = fv < tv
+          let count = isIncrease ? titem - fitem : fitem - titem
+          let s = faaa[start]
+          let e = taaa[start]
+          let timegap = tgs.pop()
+          let timedelay = 0
+          let offset = offsets.pop()
+          const loopNumbers = []
+          for (let i = 0; i < 10; i++) {
+            loopNumbers.push({
+              number: i,
+              name: [],
+              duration: [],
+              timeFunction: [],
+              delay: [],
+              fillMode: [],
+              style: ''
+            })
+          }
+
+          while (count) {
+            const d = offset + timedelay - timegap > 0 ? offset + timedelay - timegap : 0
+            loopNumbers[s].name.push('numberfadein')
+            loopNumbers[s].duration.push('0ms')
+            loopNumbers[s].timeFunction.push('linear')
+            loopNumbers[s].fillMode.push('forwards')
+            loopNumbers[s].delay.push(`${d + this.delay}ms`)
+
+            if (offset + timedelay < this.time) {
+              loopNumbers[s].name.push('numberfadeout')
+              loopNumbers[s].duration.push('0ms')
+              loopNumbers[s].timeFunction.push('linear')
+              loopNumbers[s].fillMode.push('forwards')
+              loopNumbers[s].delay.push(`${offset + timedelay + this.delay}ms`)
+            }
+
+            s = isIncrease ? s + 1 : s - 1
+
+            if (s < 0) {
+              s = 9
+            } else if (s > 9) {
+              s = 0
+            }
+            console.log(s, timedelay, timegap, d, offset + timedelay, 'ssss')
+            timedelay += timegap
+            count--
+          }
+
+          loopNumbers[e].name.push('numberfadein')
+          loopNumbers[e].duration.push('0ms')
+          loopNumbers[e].timeFunction.push('linear')
+          loopNumbers[e].fillMode.push('forwards')
+          loopNumbers[e].delay.push(`${offset + timedelay - timegap + this.delay}ms`)
+
+          console.log(loopNumbers, 'loopNumbers')
+          result.push(loopNumbers)
+          start++
+        }
+        result = result.map(r => {
+          return r.map(item => {
+            if (item.name) {
+              return {
+                number: item.number,
+                style: `animation-name: ${item.name.join(',')};
+                      animation-duration: ${item.duration.join(',')};
+                      animation-timing-function: ${item.timeFunction.join(',')};
+                      animation-delay: ${item.delay.join(',')};
+                      animation-fill-mode: ${item.fillMode.join(',')};`
+              }
+            }
+            return item
+          })
         })
+        result.splice(faa.length, 0, [{ style: 'opacity: 1', number: '.' }])
+        this.result = result
+        console.log(this.result, 'rrrrr')
       },
       calcRect () {
         this.$nextTick(() => {
           this.$refs.number && this.$refs.number.boundingClientRect((res) => {
-            res && (this.listStyle = `width:${res.width || res[res.length - 1].width}px;height: ${res.height || res[res.length - 1].height}px;`)
+            if (res) {
+              console.log(res, 'widthwidth')
+              setTimeout(() => {
+                this.listStyle = `width:${res.width || res[res.length - 1].width}px;height: ${res.height || res[res.length - 1].height}px;`
+              }, this.time + this.delay)
+            }
           }).exec()
         })
       }
@@ -126,7 +251,7 @@
           const [fromValue, toValue, textStyle] = val
           const [ofromValue, otoValue, otextStyle] = oldval = []
           if (fromValue !== ofromValue || toValue !== otoValue || textStyle !== otextStyle) {
-            this.calcRect()
+            // this.calcRect()
           }
         },
         immediate: true
@@ -136,11 +261,13 @@
 </script>
 
 <style lang="stylus">
-.item 
+.numberscroll-list
+  display flex
+.jtem
+  position relative
+.item
   position absolute
   opacity 0
-  padding 0px 5px
-
   @keyframes numberfadeout
   {
     0%{
