@@ -18,6 +18,12 @@
     <view class="item" bindtap="jump('movefade')">
       移动消失
     </view>
+    <view class="item" bindtap="jump('loadingfinish')">
+      加载完成
+    </view>
+    <view class="item" bindtap="jump('progressbar')">
+      进度条
+    </view>
   </view>
 </template>
 

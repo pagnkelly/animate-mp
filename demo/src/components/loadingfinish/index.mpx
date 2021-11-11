@@ -1,0 +1,135 @@
+<template>
+  <view class="icon">
+    <view style="{{loadingStyle}}" class="loading" />
+    <view style="{{compleateStyle}}" class="compleate" />
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    data: {
+      loadingStyle: `animation-name: iconloading, lf_fadein, lf_fadeout;
+                      animation-duration: 1.03s, 133ms, 133ms;
+                      animation-timing-function: steps(1), linear, linear;
+                      animation-delay: 0s, 1s, 2s;
+                      animation-iteration-count: infinite, 1, 1;
+                      animation-fill-mode: none, forwards, forwards;`,
+      compleateStyle: `animation-name: iconcompleate, lf_fadein;
+                        animation-duration: 0.53s, 133ms;
+                        animation-timing-function: steps(1), linear;
+                        animation-delay: 2133ms, 2133ms;
+                        animation-fill-mode: forwards, forwards;`
+    }
+  })
+</script>
+
+<style lang="stylus">
+.icon
+  width 25px
+  height 25px
+  margin-right 8px
+  position relative
+  image
+    width 100%
+    height 100%
+    position absolute
+    left 0
+    top 0
+  .loading
+    background-image url('https://gift-static.hongyibo.com.cn/static/kfpub/2895/加载中_雪碧图_1s.png')
+    width 75px
+    height 75px
+    transform scale(1/3)
+    position absolute
+    left -25px
+    top -25px
+    opacity 0
+  .compleate
+    background-image url('https://gift-static.hongyibo.com.cn/static/kfpub/2895/完成.png')
+    width 75px
+    height 75px
+    transform scale(1/3)
+    position absolute
+    left -25px
+    top -25px
+    opacity 0
+
+  @keyframes iconloading {
+    0% { background-position: 0px 0px; }
+    3.45% { background-position: -75px 0px; }
+    6.90% { background-position: -150px 0px; }
+    10.34% { background-position: -225px 0px; }
+    13.79% { background-position: -300px 0px; }
+    17.24% { background-position: -375px 0px; }
+    20.69% { background-position: -450px 0px; }
+    24.14% { background-position: -525px 0px; }
+    27.59% { background-position: -600px 0px; }
+    31.03% { background-position: -675px 0px; }
+    34.48% { background-position: -750px 0px; }
+    37.93% { background-position: -825px 0px; }
+    41.38% { background-position: -900px 0px; }
+    44.83% { background-position: -975px 0px; }
+    48.28% { background-position: -1050px 0px; }
+    51.72% { background-position: -1125px 0px; }
+    55.17% { background-position: -1200px 0px; }
+    58.62% { background-position: -1275px 0px; }
+    62.07% { background-position: -1350px 0px; }
+    65.52% { background-position: -1425px 0px; }
+    68.97% { background-position: -1500px 0px; }
+    72.41% { background-position: -1575px 0px; }
+    75.86% { background-position: -1650px 0px; }
+    79.31% { background-position: -1725px 0px; }
+    82.76% { background-position: -1800px 0px; }
+    86.21% { background-position: -1875px 0px; }
+    89.66% { background-position: -1950px 0px; }
+    93.10% { background-position: -2025px 0px; }
+    96.55% { background-position: -2100px 0px; }
+    100.00% { background-position: -2175px 0px; }
+  }
+
+  @keyframes iconcompleate {
+    0% { background-position: 0px 0px; }
+    6.67% { background-position: -75px 0px; }
+    13.33% { background-position: -150px 0px; }
+    20.00% { background-position: -225px 0px; }
+    26.67% { background-position: -300px 0px; }
+    33.33% { background-position: -375px 0px; }
+    40.00% { background-position: -450px 0px; }
+    46.67% { background-position: -525px 0px; }
+    53.33% { background-position: -600px 0px; }
+    60.00% { background-position: -675px 0px; }
+    66.67% { background-position: -750px 0px; }
+    73.33% { background-position: -825px 0px; }
+    80.00% { background-position: -900px 0px; }
+    86.67% { background-position: -975px 0px; }
+    93.33% { background-position: -1050px 0px; }
+    100.00% { background-position: -1125px 0px; }
+  }
+
+  @keyframes lf_fadeout
+  {
+    0%{
+      opacity: 1;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
+  @keyframes lf_fadein
+  {
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>
