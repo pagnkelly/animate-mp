@@ -7,13 +7,7 @@
 <script type="application/json">
   {
     "pages": [
-      "./pages/index",
-      "./pages/numberscroll",
-      "./pages/textscroll",
-      "./pages/shakejump",
-      "./pages/progressbar",
-      "./pages/loadingfinish",
-      "./pages/circle-countdown"
+      "./pages/index"
     ]
   }
 </script>

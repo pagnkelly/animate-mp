@@ -1,17 +1,21 @@
 <template>
   <view class="container">
-    <view class="demo" bindtap="translate">
-      <view class="square shadow">
-      </view>
-      <view class="square" wx:style="{{demo1}}">
-      </view>
-    </view>
     <view wx:for="{{list}}" wx:key="name" class="item" bindtap="jump(item.name)" style="background:{{item.color}}">
       <view>
         <component is="{{item.name}}" />
       </view>
       <view>
         {{item.zh}}
+      </view>
+    </view>
+
+    <view class="bottom">
+      <view class="search" bindtap="search">
+        <image src="https://gift-static.hongyibo.com.cn/static/kfpub/3227/sousuo.png" mode="widthFix"></image>
+      </view>
+      <input type="text" style="{{textStyle}}" bindinput="textChange"/>
+      <view class="refresh" bindtap="refresh">
+        <image src="https://gift-static.hongyibo.com.cn/static/kfpub/3227/shuaxin.png" mode="widthFix"></image>
       </view>
     </view>
   </view>
@@ -21,6 +25,7 @@
 .container
   display flex
   flex-direction column
+  padding-bottom 100px
   .demo
     height 100px
     background lightblue
@@ -42,70 +47,100 @@
   justify-content space-between
   align-items center
   padding 0 20px
+.bottom
+  position fixed
+  bottom 0
+  width 100%
+  display flex
+  justify-content center
+  align-items center
+  height 100px
+  z-index 100
+  background linear-gradient(to bottom, rgba(254,254,254,0.65) 0%, rgba(240,240,240,1) 49%, rgba(226,226,226,1) 100%)
+  box-shadow 0px 10px 36px 0px rgba(0,5,53,0.09)
+  .search
+    padding 0 20px
+    image
+      width 44px
+      height 44px
+  .refresh
+    padding 0 20px
+    image
+      width 44px
+      height 44px
 </style>
 
 <script lang="ts">
-import mpx, { createPage } from '@mpxjs/core'
-import animate from '../../../src/main'
+import { createPage } from '@mpxjs/core'
+const LIST = [
+  {
+    name: 'numberscroll',
+    en: 'szgd',
+    zh: '数字滚动'
+  },
+  {
+    name: 'textscroll',
+    en: 'wagd',
+    zh: '文案滚动'
+  },
+  {
+    name: 'shakejump',
+    en: 'hdty',
+    zh: '晃动跳跃'
+  },
+  {
+    name: 'loadingfinish',
+    en: 'jzwc',
+    zh: '加载完成'
+  },
+  {
+    name: 'progressbar',
+    en: 'jdt',
+    zh: '进度条'
+  },
+  {
+    name: 'circle-countdown',
+    en: 'yxdjs',
+    zh: '圆形倒计时'
+  }
+]
 createPage({
   data: {
-    demo1: {
-    }
+    refreshList: LIST,
+    textF: false
   },
   onLoad () {
-    // onLoad
-    const a = animate()
-    console.log(a, 'aaaaa')
   },
   computed: {
     list () {
       const COLORS = ['#e54d42', '#f37b1d', '#fbbd08', '#8dc63f', '#1cbbb4']
-      const list = [
-        {
-          name: 'numberscroll',
-          zh: '数字滚动'
-        },
-        {
-          name: 'textscroll',
-          zh: '文案滚动'
-        },
-        {
-          name: 'shakejump',
-          zh: '晃动跳跃'
-        },
-        {
-          name: 'loadingfinish',
-          zh: '加载完成'
-        },
-        {
-          name: 'progressbar',
-          zh: '进度条'
-        },
-        {
-          name: 'circle-countdown',
-          zh: '圆形倒计时'
-        }
-      ]
-      return list.map((item, idx) => {
+      return this.refreshList.map((item, idx) => {
         return {
           ...item,
           color: COLORS[idx] ? COLORS[idx] : COLORS[idx % COLORS.length]
         }
       })
+    },
+    textStyle () {
+      return this.textF ? 'width: 140px;transition:width 0.3s linear;' : 'width: 0;transition:width 0.3s linear;'
     }
   },
   methods: {
-    translate (): void {
-      this.$nextTick(() => {
-        this.demo1 = {
-          transform: 'translateX(200px)',
-          transition: 'transform 1s'
-        }
+    refresh () {
+      this.refreshList = []
+      setTimeout(() => {
+        this.refreshList = LIST
       })
     },
-    jump (page: string) {
-      console.log(page, 'page')
-      mpx.navigateTo({ url: page })
+    search () {
+      this.textF = !this.textF
+    },
+    textChange ({ detail }:any) {
+      const v = detail.value
+      this.refreshList = LIST.filter(item => {
+        return item.zh.includes(v) || item.en.includes(v)
+      })
+      console.log(v, 'detail')
     }
   }
 })
