@@ -11,9 +11,9 @@
       "./pages/numberscroll",
       "./pages/textscroll",
       "./pages/shakejump",
-      "./pages/movefade",
       "./pages/progressbar",
-      "./pages/loadingfinish"
+      "./pages/loadingfinish",
+      "./pages/circle-countdown"
     ]
   }
 </script>

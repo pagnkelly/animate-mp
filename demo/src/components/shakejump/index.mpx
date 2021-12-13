@@ -62,12 +62,10 @@
 
 <style lang="stylus">
 .text
-  margin 100px 0 0 20px
   display flex
   align-items baseline
   .jumper
     color #FE01A2
-    font-size 40px
     margin 0 5px
     position relative
     .jumper-wrapper

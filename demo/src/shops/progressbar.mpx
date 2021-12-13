@@ -1,11 +1,11 @@
 <template>
-  <movefade></movefade>
+  <progressbar />
 </template>
 
 <script>
-  import { createPage } from '@mpxjs/core'
+  import { createComponent } from '@mpxjs/core'
 
-  createPage({
+  createComponent({
   
   })
 </script>
@@ -17,7 +17,7 @@
 <script type="application/json">
   {
     "usingComponents": {
-      "movefade": "../components/movefade/index"
+      "progressbar": "../components/progressbar/index"
     }
   }
 </script>

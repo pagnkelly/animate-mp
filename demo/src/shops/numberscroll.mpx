@@ -8,9 +8,9 @@
 </template>
 
 <script>
-  import { createPage } from '@mpxjs/core'
+  import { createComponent } from '@mpxjs/core'
 
-  createPage({
+  createComponent({
     data: {
       numberAnimationData: [55.72, 51.32],
       sty: ''
@@ -24,7 +24,7 @@
 <script type="application/json">
   {
     "usingComponents": {
-      "numberscroll": "../components/numberscroll/indexs"
+      "numberscroll": "../components/numberscroll"
     }
   }
 </script>

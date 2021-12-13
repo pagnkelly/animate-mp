@@ -1,0 +1,190 @@
+<template>
+  <view class="numberscroll-list" style="{{listStyle}}">
+    <view wx:if="{{delay}}" class="item" style="{{delayStyle}}{{textStyle}}">
+      {{fromValue}}
+    </view>
+    <!-- <view wx:ref="number" class="item" wx:for="{{numbers}}" style="{{item.style}};{{textStyle}}">
+      {{item.number}}
+    </view> -->
+    <view>
+      {{numb}}
+    </view>
+    <view style="opacity:0;{{textStyle}}">
+      {{fromValue}}
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+  import NP from 'number-precision'
+
+  createComponent({
+    properties: {
+      fromValue: {
+        type: Number,
+        value: 10.31
+      },
+      toValue: {
+        type: Number,
+        value: 10.11
+      },
+      time: {
+        type: Number,
+        value: 1000
+      },
+      textStyle: {
+        type: String,
+        value: ''
+      },
+      delay: {
+        type: Number,
+        value: 0
+      }
+    },
+    data: {
+      numbers: [
+      ],
+      numb: 0,
+      listStyle: ''
+    },
+    attached () {
+    },
+    computed: {
+      delayStyle () {
+        console.log(this.delay, 'this.delay')
+        return `animation-name: number_fadein, number_fadeout;
+                animation-duration: 0, 0;
+                animation-timing-function: linear, linear;
+                animation-delay: 0ms, ${this.delay}ms;
+                animation-fill-mode: forwards, forwards;`
+      }
+    },
+    methods: {
+      doAnimate (fv, tv, ti) {
+        if (fv === tv) {
+          this.numbers = [{
+            number: fv,
+            style: ''
+          }]
+        } else {
+          // this.do(fv, tv)
+          this.createNumbers(fv, tv, ti)
+        }
+      },
+      createNumbers (fv, tv, ti) {
+        const isIncrease = fv < tv
+        const isDecimals = fv.toString().includes('.') || tv.toString().includes('.')
+        const fva = fv.toString().split('.')
+        const tva = tv.toString().split('.')
+        const gap = isIncrease ? NP.minus(tv, fv) : NP.minus(fv, tv)
+        const numbers = []
+        let count = gap
+        let decimals = 1
+        if (isDecimals) {
+          decimals = Math.pow(10, (fva[1] && fva[1].length) || (tva[1] && tva[1].length))
+          count = NP.times(gap, decimals)
+        }
+        console.log(gap, decimals, count, 'count')
+        const itemTime = ti / (count + 1)
+        for (let i = 0; i < count + 1; i++) {
+          const fn = isIncrease ? NP.plus : NP.minus
+          const style = i === count
+            ? `animation-name: number_fadein;
+                                        animation-duration: 0;
+                                        animation-timing-function: linear;
+                                        animation-delay: ${itemTime * (i + 1) + this.delay}ms;
+                                        animation-fill-mode: forwards;`
+            : `animation-name: number_fadein, number_fadeout;
+              animation-duration: 0, 0;
+              animation-timing-function: linear, linear;
+              animation-delay: ${itemTime * (i + 1) + this.delay}ms, ${itemTime * (i + 2) + this.delay}ms;
+              animation-fill-mode: forwards, forwards;`
+          numbers.push({
+            number: fn(fv, NP.divide(i, decimals)),
+            style
+          })
+        }
+        this.numbers = []
+        setTimeout(() => {
+          this.numbers = numbers
+        })
+        const fnn = isIncrease ? NP.plus : NP.minus
+        this.do(fnn, fv, tv, NP.divide(1, decimals), itemTime)
+      },
+      do (fn, fv, tv, decimals, itemTime) {
+        setTimeout(() => {
+          this.numb = fn(fv, decimals)
+          if (this.numb !== tv) {
+            this.do(fn, this.numb, tv, decimals, itemTime)
+          }
+        }, itemTime)
+      },
+      calcRect () {
+        this.$nextTick(() => {
+          this.$refs.number && this.$refs.number.boundingClientRect((res) => {
+            if (res) {
+              setTimeout(() => {
+                this.listStyle = `width:${res.width || res[0].width || res[res.length - 1].width}px;height: ${res.height || res[res.length - 1].height}px;`
+              }, this.time + this.delay)
+            }
+          }).exec()
+        })
+      }
+    },
+    watch: {
+      'fromValue,toValue,time': {
+        handler (val, oldval) {
+          const [fromValue, toValue, time] = val
+          const [ofromValue, otoValue, otime] = oldval = []
+          if (fromValue !== ofromValue || toValue !== otoValue || time !== otime) {
+            console.log(fromValue, toValue, 'fromValue, toValue')
+            this.doAnimate(fromValue, toValue, time)
+          }
+        },
+        immediate: true
+      },
+      'fromValue,toValue,textStyle': {
+        handler (val, oldval) {
+          const [fromValue, toValue, textStyle] = val
+          const [ofromValue, otoValue, otextStyle] = oldval = []
+          if (fromValue !== ofromValue || toValue !== otoValue || textStyle !== otextStyle) {
+            this.calcRect()
+          }
+        },
+        immediate: true
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.item 
+  position absolute
+  opacity 0
+  @keyframes number_fadeout
+  {
+    0%{
+      opacity: 1;
+    }
+    100%{
+      opacity: 0;
+    }
+  }
+  @keyframes number_fadein
+  {
+    0%{
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+    }
+  }
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {}
+  }
+</script>

@@ -6,23 +6,13 @@
       <view class="square" wx:style="{{demo1}}">
       </view>
     </view>
-    <view class="item" bindtap="jump('numberscroll')">
-      数字滚动
-    </view>
-    <view class="item" bindtap="jump('textscroll')">
-      文案滚动
-    </view>
-    <view class="item" bindtap="jump('shakejump')">
-      晃动跳跃
-    </view>
-    <view class="item" bindtap="jump('movefade')">
-      移动消失
-    </view>
-    <view class="item" bindtap="jump('loadingfinish')">
-      加载完成
-    </view>
-    <view class="item" bindtap="jump('progressbar')">
-      进度条
+    <view wx:for="{{list}}" wx:key="name" class="item" bindtap="jump(item.name)" style="background:{{item.color}}">
+      <view>
+        <component is="{{item.name}}" />
+      </view>
+      <view>
+        {{item.zh}}
+      </view>
     </view>
   </view>
 </template>
@@ -44,11 +34,14 @@
     height 25px
     background #7F00FF
 .item
-  height 50px
-  background gray
+  height 100px
   color #ffffff
-  text-align center
-  line-height 40px
+  margin 10px 20px
+  border-radius 8px
+  display flex
+  justify-content space-between
+  align-items center
+  padding 0 20px
 </style>
 
 <script lang="ts">
@@ -63,6 +56,43 @@ createPage({
     // onLoad
     const a = animate()
     console.log(a, 'aaaaa')
+  },
+  computed: {
+    list () {
+      const COLORS = ['#e54d42', '#f37b1d', '#fbbd08', '#8dc63f', '#1cbbb4']
+      const list = [
+        {
+          name: 'numberscroll',
+          zh: '数字滚动'
+        },
+        {
+          name: 'textscroll',
+          zh: '文案滚动'
+        },
+        {
+          name: 'shakejump',
+          zh: '晃动跳跃'
+        },
+        {
+          name: 'loadingfinish',
+          zh: '加载完成'
+        },
+        {
+          name: 'progressbar',
+          zh: '进度条'
+        },
+        {
+          name: 'circle-countdown',
+          zh: '圆形倒计时'
+        }
+      ]
+      return list.map((item, idx) => {
+        return {
+          ...item,
+          color: COLORS[idx] ? COLORS[idx] : COLORS[idx % COLORS.length]
+        }
+      })
+    }
   },
   methods: {
     translate (): void {
@@ -84,6 +114,12 @@ createPage({
 <script type="application/json">
   {
     "usingComponents": {
+      "numberscroll": "../shops/numberscroll",
+      "textscroll": "../shops/textscroll",
+      "shakejump": "../shops/shakejump",
+      "progressbar": "../shops/progressbar",
+      "loadingfinish": "../shops/loadingfinish",
+      "circle-countdown": "../shops/circle-countdown"
     }
   }
 </script>

@@ -1313,6 +1313,11 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
+"@vant/weapp@^1.9.2":
+  version "1.9.2"
+  resolved "http://artifactory.intra.xiaojukeji.com/artifactory/api/npm/npm/@vant/weapp/download/@vant/weapp-1.9.2.tgz?dl=https%3A%2F%2Fregistry.npmmirror.com%2F%40vant%2Fweapp%2Fdownload%2F%40vant%2Fweapp-1.9.2.tgz#406174c11d3f421dbbeff995a556ce1d30629908"
+  integrity sha1-QGF0wR0/Qh277/mVpVbOHTBimQg=
+
 "@vue/component-compiler-utils@^3.1.0":
   version "3.2.0"
   resolved "http://artifactory.intra.xiaojukeji.com:80/artifactory/api/npm/npm/@vue/component-compiler-utils/download/@vue/component-compiler-utils-3.2.0.tgz#8f85182ceed28e9b3c75313de669f83166d11e5d"

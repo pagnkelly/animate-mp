@@ -1,7 +1,7 @@
 <template>
   <view class="textscroll-wrapper">
     <view style="{{textStyle}}" bindanimationend="animend">{{texta}}</view>
-    <view style="{{textStyle}}">{{textb}}</view>
+    <view style="{{textStyle}}">{{text}}</view>
   </view>
 </template>
 
@@ -9,32 +9,27 @@
   import { createComponent } from '@mpxjs/core'
 
   createComponent({
-    data: {
-      texta: 'aaaaaaa',
-      textb: 'aaaaaaa',
-      textStyle: ''
+    properties: {
+      text: String
     },
-    attached () {
-      setTimeout(() => {
-        this.textb = 'bbbbbbb'
-      }, 2000)
-      setTimeout(() => {
-        this.textb = 'ccccccc'
-      }, 4000)
-      setTimeout(() => {
-        this.textb = 'ddddddd'
-      }, 6000)
+    data: {
+      texta: '',
+      textStyle: ''
     },
     methods: {
       animend (v) {
-        this.texta = this.textb
+        this.texta = this.text
         this.textStyle = 'transform: translateY(0)'
       }
     },
     watch: {
-      textb: {
+      text: {
         handler (val, oldval) {
           console.log(val, oldval, 'ccccc')
+          if (val && !oldval) {
+            this.texta = val
+          }
+
           if (oldval && val !== oldval) {
             this.textStyle = `animation-name: text_move;
                               animation-duration: 1s;
@@ -53,7 +48,6 @@
 .textscroll-wrapper
   overflow hidden
   height 22px
-  margin-top 10px
   @keyframes text_move
   {
     0%{

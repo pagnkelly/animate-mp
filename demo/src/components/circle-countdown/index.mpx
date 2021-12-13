@@ -1,0 +1,199 @@
+<template>
+  <view class="circle-countdown-wrapper">
+    <view class="circle-countdown-box" style="{{boxStyle}}">
+      <view class="left-box" style="{{subBoxStyle}}">
+        <view class="left-item" style="{{leftItemStyle}}">
+        </view>
+      </view>
+      <view class="right-box" style="{{subBoxStyle}}">
+        <view class="right-item" style="{{rightItemStyle}}">
+        </view>
+      </view>
+      <view class="circle-mask" style="{{circleMaskStyle}}">
+        <slot></slot>
+      </view>
+      <view class="dot-mask" style="{{dotMaskStyle}}" wx:if="{{hasDot}}">
+        <view class="dot" style="{{dotStyle}}"></view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+  createComponent({
+    properties: {
+      boxWidth: {
+        type: Number,
+        value: 24
+      },
+      boxHeight: {
+        type: Number,
+        value: 24
+      },
+      boxBgColor: {
+        type: String,
+        value: ''
+      },
+      hasDot: {
+        type: Boolean,
+        value: false
+      },
+      progressLineWidth: {
+        type: Number,
+        value: 1
+      },
+      progressLineColor: {
+        type: String,
+        value: '#FF8449'
+      },
+      bgColor: {
+        type: String,
+        value: '#FFF1EA'
+      },
+      dotBgColor: {
+        type: String,
+        value: 'red'
+      },
+      dotWidth: {
+        type: Number,
+        value: 4
+      },
+      dotHeight: {
+        type: Number,
+        value: 4
+      },
+      timeCount: {
+        type: Number,
+        value: 10
+      },
+      dir: {
+        type: String,
+        value: 'z'
+      }
+    },
+    computed: {
+      boxStyle () {
+        return `width: ${this.boxWidth}px;height: ${this.boxHeight}px;background-color:${this.boxBgColor};`
+      },
+      subBoxStyle () {
+        return `width: ${this.boxWidth / 2}px;height: ${this.boxHeight}px;`
+      },
+      leftItemStyle () {
+        return `border-top-left-radius: ${this.boxWidth / 2}px;border-bottom-left-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};animation: loading-left-${this.dir} ${this.timeCount}s linear infinite;`
+      },
+      rightItemStyle () {
+        return `border-top-right-radius: ${this.boxWidth / 2}px;border-bottom-right-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};animation: loading-right-${this.dir} ${this.timeCount}s linear infinite;`
+      },
+      circleMaskStyle () {
+        return `top: ${this.progressLineWidth}px;left: ${this.progressLineWidth}px;right: ${this.progressLineWidth}px;bottom: ${this.progressLineWidth}px;background-color:${this.bgColor};`
+      },
+      dotStyle () {
+        return `width: ${this.dotWidth}px;height: ${this.dotHeight}px;background-color:${this.dotBgColor};margin-top:-${(this.dotHeight - this.progressLineWidth) / 2}px`
+      },
+      dotMaskStyle () {
+        return `animation: dot-mask ${this.timeCount}s linear infinite;`
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.circle-countdown-wrapper
+  .circle-countdown-box
+    position: relative
+    border-radius: 50%
+    .left-box, .right-box
+      position: absolute
+      top: 0
+      overflow: hidden
+      z-index: 1
+    .left-box
+      left: 0
+    .right-box
+      right: 0
+    .left-item,.right-item
+      width: 100%
+      height: 100%
+    .left-item
+      transform-origin: right center
+    .right-item
+      transform-origin: left center
+    .circle-mask
+      position: absolute
+      z-index: 2
+      border-radius: 50%
+    .dot-mask
+      position relative 
+      z-index: 3 
+      border-radius: 50%
+      width: 100%
+      height: 100%
+      .dot
+        position absolute
+        left 50%
+        transform translateX(-50%)
+        margin 0 auto
+        border-radius: 50%
+    @keyframes loading-left-z{
+        0%{
+            transform: rotate(0deg)
+        }
+        50%{
+            transform: rotate(0deg)
+        }
+        100%{
+            transform: rotate(180deg)
+        }
+    }
+    @keyframes loading-left-f{
+        0%{
+          transform: rotate(-180deg)
+        }
+        50%{
+          transform: rotate(-180deg)
+        }
+        100%{
+          transform: rotate(0deg)
+        }
+    }
+    @keyframes loading-right-z{
+        0%{
+          transform: rotate(0deg)
+        }
+        50%{
+          transform: rotate(180deg)
+        }
+        100%{
+          transform: rotate(180deg)
+        }
+    }
+    @keyframes loading-right-f{
+         0%{
+            transform: rotate(-180deg)
+        }
+        50%{
+            transform: rotate(0deg)
+        }
+        100%{
+            transform: rotate(0deg)
+        }
+    }
+    @keyframes dot-mask{
+        0%{
+            transform: rotate(0deg)
+        }
+        50%{
+            transform: rotate(180deg)
+        }
+        100%{
+            transform: rotate(360deg)
+        }
+    }
+</style>
+
+<script type="application/json">
+  {
+    "component": true
+  }
+</script>
