@@ -7,6 +7,10 @@
       <view>
         {{item.zh}}
       </view>
+
+      <view class="light-container">
+        <view class="light"></view>
+      </view>
     </view>
 
     <view class="bottom">
@@ -47,6 +51,23 @@
   justify-content space-between
   align-items center
   padding 0 20px
+  position relative
+  .light-container
+    overflow hidden
+    position absolute
+    left 0px
+    right 0px
+    top 0px
+    bottom 0px
+    .light
+      width 130px
+      height 700px
+      background-image linear-gradient(90deg, rgba(255,255,255,0.00) 0%, rgba(255,255,255,0.60) 47%, rgba(255,255,255,0.00) 100%)
+      position absolute
+      left -130px
+      top -350px
+      animation lightmove 1.5s linear forwards
+ 
 .bottom
   position fixed
   bottom 0
@@ -68,6 +89,16 @@
     image
       width 44px
       height 44px
+
+@keyframes lightmove
+{
+  0%{
+      transform: rotateZ(30deg) translate(0, 0)
+  }
+  100%{
+      transform: rotateZ(30deg) translate(800px,0)
+  }
+}
 </style>
 
 <script lang="ts">
@@ -102,6 +133,11 @@ const LIST = [
     name: 'circle-countdown',
     en: 'yxdjs',
     zh: '圆形倒计时'
+  },
+  {
+    name: 'loading',
+    en: 'loading',
+    zh: '加载中'
   }
 ]
 createPage({
@@ -154,7 +190,8 @@ createPage({
       "shakejump": "../shops/shakejump",
       "progressbar": "../shops/progressbar",
       "loadingfinish": "../shops/loadingfinish",
-      "circle-countdown": "../shops/circle-countdown"
+      "circle-countdown": "../shops/circle-countdown",
+      "loading": "../shops/loading"
     }
   }
 </script>
