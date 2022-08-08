@@ -1,0 +1,173 @@
+<template>
+  <view class="circle-countdown-wrapper">
+    <view class="circle-countdown-box" style="{{boxStyle}}">
+      <view class="left-box" style="{{subBoxStyle}}">
+        <view class="left-item" style="{{leftItemStyle}}">
+        </view>
+      </view>
+      <view class="right-box" style="{{subBoxStyle}}">
+        <view class="right-item" style="{{rightItemStyle}}">
+        </view>
+      </view>
+      <view class="circle-mask" style="{{circleMaskStyle}}">
+        <slot></slot>
+      </view>
+      <view
+        class="move-dot"
+        style="{{dotStyle}}"
+      >
+        <image
+          src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/pVitte5_EdCPLD-RYLoJ-.apng"
+          mode="widthFix"
+          style="width:100%;margin-top: -4rpx"
+        ></image>
+      </view>
+      <image
+        src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/LWvJJpIYhuRlYmdrWbzLL.png"
+        mode="widthFix"
+        class="cover-circle"
+      ></image>
+    </view>
+  </view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+  createComponent({
+    properties: {
+      boxWidth: {
+        type: Number,
+        value: 220
+      },
+      boxHeight: {
+        type: Number,
+        value: 220
+      },
+      boxBgColor: {
+        type: String,
+        value: '#F5F4F4'
+      },
+      hasDot: {
+        type: Boolean,
+        value: false
+      },
+      progressLineWidth: {
+        type: Number,
+        value: 10
+      },
+      progressLineColor: {
+        type: String,
+        value: '#FFC8A4'
+      },
+      bgColor: {
+        type: String,
+        value: '#FFFFFF'
+      },
+      dotBgColor: {
+        type: String,
+        value: 'red'
+      },
+      dotWidth: {
+        type: Number,
+        value: 4
+      },
+      dotHeight: {
+        type: Number,
+        value: 4
+      },
+      timeCount: {
+        type: Number,
+        value: 10
+      },
+      dir: {
+        type: String,
+        value: 'd'
+      }
+    },
+    data: {
+      leftItemStyle: 'transition:none',
+      rightItemStyle: 'transition:none',
+      dotStyle: 'transition:none'
+    },
+    attached () {
+      const all = 8
+      const half = 3
+      const rest = all - half
+      const initdeg = -180 + (half / all * 180)
+      this.leftItemStyle = `border-top-left-radius: ${this.boxWidth / 2}px;border-bottom-left-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};transform: rotateZ(${initdeg}deg)`
+      this.rightItemStyle = `border-top-right-radius: ${this.boxWidth / 2}rpx;border-bottom-right-radius: ${this.boxHeight / 2}rpx;background-color:${this.progressLineColor};transform: rotateZ(-180deg)`
+      this.dotStyle = `transform: rotateZ(${half / all * 180}deg)`
+      setTimeout(() => {
+        this.leftItemStyle = `border-top-left-radius: ${this.boxWidth / 2}px;border-bottom-left-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};transform: rotateZ(0);transition: transform ${rest}s linear 3s;`
+        this.rightItemStyle = `border-top-right-radius: ${this.boxWidth / 2}rpx;border-bottom-right-radius: ${this.boxHeight / 2}rpx;background-color:${this.progressLineColor};transform: rotateZ(0);transition: transform 8s linear ${rest + 3}s;`
+        this.dotStyle = `transform: rotateZ(${360 - half / all * 180}deg);transition: transform ${all * 2 - 6}s linear 3s`
+      }, 1000)
+    },
+    computed: {
+      boxStyle () {
+        return `width: ${this.boxWidth}rpx;height: ${this.boxHeight}rpx;background-color:${this.boxBgColor};`
+      },
+      subBoxStyle () {
+        return `width: ${this.boxWidth / 2}rpx;height: ${this.boxHeight}rpx;`
+      },
+      circleMaskStyle () {
+        return `top: ${this.progressLineWidth}rpx;left: ${this.progressLineWidth}rpx;right: ${this.progressLineWidth}rpx;bottom: ${this.progressLineWidth}rpx;background-color:${this.bgColor};`
+      }
+    }
+  })
+</script>
+
+<style lang="stylus">
+.move-dot
+  width 100rpx
+  height 100rpx
+  position absolute
+  z-index 2
+  bottom 0
+  left 50%
+  margin-left -25px
+  margin-bottom: -25px
+
+  transform rotateZ(0)
+  transform-origin 50rpx -60rpx
+.cover-circle
+  width 220rpx
+  height 220rpx
+  position absolute
+  left 0
+  z-index 1
+.circle-countdown-wrapper
+  background #fff
+  transform scale(0.8)  
+  .circle-countdown-box
+    position: relative
+    border-radius: 50%
+    .left-box, .right-box
+      position: absolute
+      top: 0
+      overflow: hidden
+      z-index: 1
+    .left-box
+      left: 0
+    .right-box
+      right: 0
+    .left-item,.right-item
+      width: 100%
+      height: 100%
+    .left-item
+      transform-origin: right center
+      transform rotateZ(-180deg)
+    .right-item
+      transform-origin: left center
+      transform rotateZ(-180deg)
+    .circle-mask
+      position: absolute
+      z-index: 2
+      border-radius: 50%
+</style>
+
+<script type="application/json">
+  {
+    "component": true
+  }
+</script>

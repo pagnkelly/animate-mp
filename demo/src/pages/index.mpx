@@ -135,6 +135,11 @@ const LIST = [
     zh: '圆形倒计时'
   },
   {
+    name: 'half-circle-countdown',
+    en: 'bydjs',
+    zh: '半圆倒计时'
+  },
+  {
     name: 'loading',
     en: 'loading',
     zh: '加载中'
@@ -191,6 +196,7 @@ createPage({
       "progressbar": "../shops/progressbar",
       "loadingfinish": "../shops/loadingfinish",
       "circle-countdown": "../shops/circle-countdown",
+      "half-circle-countdown": "../shops/half-circle-countdown",
       "loading": "../shops/loading"
     }
   }
