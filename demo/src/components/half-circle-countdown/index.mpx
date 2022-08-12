@@ -1,32 +1,59 @@
 <template>
   <view class="circle-countdown-wrapper">
-    <view class="circle-countdown-box" style="{{boxStyle}}">
-      <view class="left-box" style="{{subBoxStyle}}">
+    <view class="circle-countdown-box" style="{{animateStyle}}">
+      <view class="left-box">
         <view class="left-item" style="{{leftItemStyle}}">
         </view>
       </view>
-      <view class="right-box" style="{{subBoxStyle}}">
+      <view class="right-box">
         <view class="right-item" style="{{rightItemStyle}}">
         </view>
       </view>
-      <view class="circle-mask" style="{{circleMaskStyle}}">
-        <slot></slot>
+      <view class="circle-mask">
       </view>
       <view
         class="move-dot"
         style="{{dotStyle}}"
       >
+      <!-- 火球 -->
         <image
           src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/pVitte5_EdCPLD-RYLoJ-.apng"
           mode="widthFix"
           style="width:100%;margin-top: -4rpx"
         ></image>
       </view>
+      <!-- 底部遮罩层 -->
       <image
         src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/LWvJJpIYhuRlYmdrWbzLL.png"
         mode="widthFix"
         class="cover-circle"
       ></image>
+      <!-- 中心图片 -->
+       <image
+        src="{{centerImg}}"
+        mode="widthFix"
+        class="center-img"
+      ></image>
+    </view>
+    <!-- 最终动画弹出 -->
+    <image
+      wx:if="{{showFinishAnimate}}"
+      src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/OKdXnDJuIrc1p8RIpx9rf.apng"
+      mode="widthFix"
+      class="bounce-end"
+    ></image>
+    <!-- 底部文案 -->
+    <view wx:if="{{!showEnd}}" class="bottom-text">
+      {{title}} {{ countdownText }}
+    </view>
+    <!-- 结束文案 -->
+    <view wx:if="{{showFinishAnimate}}" class="bottom-text" style="padding-left: 40rpx;">
+      <image
+        src="https://gift-static.hongyibo.com.cn/static/kfpub/3653/Kd55gvtFSh3FVJGxe6ppE.apng"
+        mode="widthFix"
+        style="width:65rpx;position:absolute;left: -16rpx; top:-12rpx;"
+      ></image>
+      {{subtitle}}
     </view>
   </view>
 </template>
@@ -35,89 +62,128 @@
   import { createComponent } from '@mpxjs/core'
   createComponent({
     properties: {
-      boxWidth: {
-        type: Number,
-        value: 220
-      },
-      boxHeight: {
-        type: Number,
-        value: 220
-      },
-      boxBgColor: {
+      title: {
         type: String,
-        value: '#F5F4F4'
+        value: '超时赔'
       },
-      hasDot: {
-        type: Boolean,
-        value: false
-      },
-      progressLineWidth: {
-        type: Number,
-        value: 10
-      },
-      progressLineColor: {
+      subtitle: {
         type: String,
-        value: '#FFC8A4'
+        value: '赔付已入账'
       },
-      bgColor: {
-        type: String,
-        value: '#FFFFFF'
-      },
-      dotBgColor: {
-        type: String,
-        value: 'red'
-      },
-      dotWidth: {
+      countdown: {
         type: Number,
-        value: 4
+        value: 17
       },
-      dotHeight: {
+      totalCountdown: {
         type: Number,
-        value: 4
+        value: 18
       },
-      timeCount: {
+      isOverTimePei: {
         type: Number,
-        value: 10
+        value: 0
       },
-      dir: {
+      centerImg: {
         type: String,
-        value: 'd'
+        value: 'https://gift-static.hongyibo.com.cn/static/kfpub/3653/AUoUhfUevGERjm6ocHiLj.apng'
       }
     },
     data: {
-      leftItemStyle: 'transition:none',
-      rightItemStyle: 'transition:none',
-      dotStyle: 'transition:none'
+      leftItemStyle: '',
+      rightItemStyle: '',
+      dotStyle: '',
+      animateStyle: '',
+      showEnd: false,
+      countdownText: '',
+      timer: null
     },
     attached () {
-      const all = 8
-      const half = 3
-      const rest = all - half
-      const initdeg = -180 + (half / all * 180)
-      this.leftItemStyle = `border-top-left-radius: ${this.boxWidth / 2}px;border-bottom-left-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};transform: rotateZ(${initdeg}deg)`
-      this.rightItemStyle = `border-top-right-radius: ${this.boxWidth / 2}rpx;border-bottom-right-radius: ${this.boxHeight / 2}rpx;background-color:${this.progressLineColor};transform: rotateZ(-180deg)`
-      this.dotStyle = `transform: rotateZ(${half / all * 180}deg)`
+      const half = this.totalCountdown / 2
+      // 两种情况
+      // 大于一半时间 小于一半时间
+      // 大于一半时间，点在左半圆，右半圆走满，左半圆走
+      let leftCountdown = this.totalCountdown - this.countdown
+      let rightCountdown = 0
+      if (this.countdown < half) {
+        leftCountdown = half
+        rightCountdown = half - this.countdown
+      }
+      // 因为不是完整的半圆 所以左边一开始是-112 走到0  右边一开始-180 需要走到-68
+      const initLeftdeg = -112 + (leftCountdown / half * 112)
+      const initRightdeg = -180 + (rightCountdown / half * 180)
+      this.leftItemStyle = `transform: rotateZ(${initLeftdeg}deg)`
+      this.rightItemStyle = `transform: rotateZ(${initRightdeg}deg)`
+      // 225 = 360 - 135  136是小扇形
+      this.dotStyle = `transform: rotateZ(${(this.totalCountdown - this.countdown) / this.totalCountdown * 225 + 68}deg)`
       setTimeout(() => {
-        this.leftItemStyle = `border-top-left-radius: ${this.boxWidth / 2}px;border-bottom-left-radius: ${this.boxHeight / 2}px;background-color:${this.progressLineColor};transform: rotateZ(0);transition: transform ${rest}s linear 3s;`
-        this.rightItemStyle = `border-top-right-radius: ${this.boxWidth / 2}rpx;border-bottom-right-radius: ${this.boxHeight / 2}rpx;background-color:${this.progressLineColor};transform: rotateZ(0);transition: transform 8s linear ${rest + 3}s;`
-        this.dotStyle = `transform: rotateZ(${360 - half / all * 180}deg);transition: transform ${all * 2 - 6}s linear 3s`
-      }, 1000)
+        this.leftItemStyle = `transform: rotateZ(0);transition: transform ${half - leftCountdown}s linear;`
+        this.rightItemStyle = `transform: rotateZ(-68deg);transition: transform ${half - rightCountdown}s linear ${half - leftCountdown}s;`
+        this.dotStyle = `transform: rotateZ(292deg);transition: transform ${this.countdown}s linear`
+        this.doCountdown(this.countdown)
+      }, 0)
+    },
+    detached () {
+      clearTimeout(this.timer)
     },
     computed: {
-      boxStyle () {
-        return `width: ${this.boxWidth}rpx;height: ${this.boxHeight}rpx;background-color:${this.boxBgColor};`
+      showFinishAnimate () {
+        return this.showEnd && this.isOverTimePei !== 1
+      }
+    },
+    methods: {
+      doCountdown (countdown) {
+        if (countdown < 0) {
+          this.countdownText = ''
+          this.doFinish()
+          return clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          const s = countdown % 60
+          const m = Math.floor(countdown / 60)
+
+          this.countdownText = `${this.add0(m)}:${this.add0(s)}`
+          this.doCountdown(countdown - 1)
+        }, 1000)
       },
-      subBoxStyle () {
-        return `width: ${this.boxWidth / 2}rpx;height: ${this.boxHeight}rpx;`
+      add0 (n) {
+        return n > 9 ? n : '0' + n
       },
-      circleMaskStyle () {
-        return `top: ${this.progressLineWidth}rpx;left: ${this.progressLineWidth}rpx;right: ${this.progressLineWidth}rpx;bottom: ${this.progressLineWidth}rpx;background-color:${this.bgColor};`
+      doFinish () {
+        this.showEnd = true
+        if (this.isOverTimePei === 1) {
+          return false
+        }
+        this.animateStyle = 'transform: scale(0.3)translateY(130rpx);opacity: 0;transition: all 333ms cubic-bezier(0.33, 0.00, 0.23, 1.00)'
       }
     }
   })
 </script>
 
 <style lang="stylus">
+.bottom-text
+  color #7F441E
+  font 24rpx
+  border-radius 20rpx
+  background #FFF1E7
+  margin-top -56rpx
+  position relative
+  z-index 3
+  padding 4rpx 14rpx
+  white-space nowrap
+.bounce-end
+  width 220rpx
+  position absolute
+  left 0
+  top 0
+.center-img
+  width 148rpx
+  position absolute
+  left 0
+  top 0
+  z-index 2
+  left 50%
+  margin-left -74rpx
+  top 50%
+  margin-top -74rpx
 .move-dot
   width 100rpx
   height 100rpx
@@ -126,8 +192,7 @@
   bottom 0
   left 50%
   margin-left -25px
-  margin-bottom: -25px
-
+  margin-bottom -25px
   transform rotateZ(0)
   transform-origin 50rpx -60rpx
 .cover-circle
@@ -138,32 +203,48 @@
   z-index 1
 .circle-countdown-wrapper
   background #fff
-  transform scale(0.8)  
+  width 220rpx
+  position relative
   .circle-countdown-box
     position: relative
     border-radius: 50%
+    width 220rpx
+    height 220rpx
+    background-color #F5F4F4
     .left-box, .right-box
-      position: absolute
-      top: 0
-      overflow: hidden
-      z-index: 1
+      position absolute
+      top 0
+      overflow hidden
+      z-index 1
+      width 110rpx
+      height 220rpx
     .left-box
       left: 0
     .right-box
       right: 0
     .left-item,.right-item
-      width: 100%
-      height: 100%
+      width 100%
+      height 100%
+      background-color #FFC8A4
     .left-item
-      transform-origin: right center
+      transform-origin right center
       transform rotateZ(-180deg)
+      border-top-left-radius 110rpx
+      border-bottom-left-radius 110rpx
     .right-item
-      transform-origin: left center
+      transform-origin left center
       transform rotateZ(-180deg)
+      border-top-right-radius 110rpx
+      border-bottom-right-radius 110rpx
     .circle-mask
-      position: absolute
-      z-index: 2
+      position absolute
+      z-index 2
       border-radius: 50%
+      top 10rpx
+      left 10rpx
+      right 10rpx
+      bottom 10rpx
+      background-color #FFFFFF
 </style>
 
 <script type="application/json">
